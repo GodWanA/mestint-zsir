@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="WpfApp1.UserControls.Pakli"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="grid_content" Grid.Row="0"/>
+        <TextBlock x:Name="textblock_lapszam" Grid.Row="1"/>
+        <Button x:Name="button_kever" Content="Kever" HorizontalAlignment="Center" Click="Button_Click" Grid.Row="2"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,100 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\Kartya\Hatter.png" />
+    <None Remove="Images\Kartya\Makk\Also.png" />
+    <None Remove="Images\Kartya\Makk\Asz.png" />
+    <None Remove="Images\Kartya\Makk\Felso.png" />
+    <None Remove="Images\Kartya\Makk\IX.png" />
+    <None Remove="Images\Kartya\Makk\Kiraly.png" />
+    <None Remove="Images\Kartya\Makk\VII.png" />
+    <None Remove="Images\Kartya\Makk\VIII.png" />
+    <None Remove="Images\Kartya\Makk\X.png" />
+    <None Remove="Images\Kartya\Piros\Also.png" />
+    <None Remove="Images\Kartya\Piros\Asz.png" />
+    <None Remove="Images\Kartya\Piros\Felso.png" />
+    <None Remove="Images\Kartya\Piros\IX.png" />
+    <None Remove="Images\Kartya\Piros\Kiraly.png" />
+    <None Remove="Images\Kartya\Piros\VII.png" />
+    <None Remove="Images\Kartya\Piros\VIII.png" />
+    <None Remove="Images\Kartya\Piros\X.png" />
+    <None Remove="Images\Kartya\Tok\Also.png" />
+    <None Remove="Images\Kartya\Tok\Asz.png" />
+    <None Remove="Images\Kartya\Tok\Felso.png" />
+    <None Remove="Images\Kartya\Tok\IX.png" />
+    <None Remove="Images\Kartya\Tok\Kiraly.png" />
+    <None Remove="Images\Kartya\Tok\VII.png" />
+    <None Remove="Images\Kartya\Tok\VIII.png" />
+    <None Remove="Images\Kartya\Tok\X.png" />
+    <None Remove="Images\Kartya\Zold\Also.png" />
+    <None Remove="Images\Kartya\Zold\Asz.png" />
+    <None Remove="Images\Kartya\Zold\Felso.png" />
+    <None Remove="Images\Kartya\Zold\IX.png" />
+    <None Remove="Images\Kartya\Zold\Kiraly.png" />
+    <None Remove="Images\Kartya\Zold\VII.png" />
+    <None Remove="Images\Kartya\Zold\VIII.png" />
+    <None Remove="Images\Kartya\Zold\X.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Kartya\Hatter.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Kartya\Makk\Also.png" />
+    <Resource Include="Images\Kartya\Makk\Asz.png" />
+    <Resource Include="Images\Kartya\Makk\Felso.png" />
+    <Resource Include="Images\Kartya\Makk\IX.png" />
+    <Resource Include="Images\Kartya\Makk\Kiraly.png" />
+    <Resource Include="Images\Kartya\Makk\VII.png" />
+    <Resource Include="Images\Kartya\Makk\VIII.png" />
+    <Resource Include="Images\Kartya\Makk\X.png" />
+    <Resource Include="Images\Kartya\Piros\Also.png" />
+    <Resource Include="Images\Kartya\Piros\Asz.png" />
+    <Resource Include="Images\Kartya\Piros\Felso.png" />
+    <Resource Include="Images\Kartya\Piros\IX.png" />
+    <Resource Include="Images\Kartya\Piros\Kiraly.png" />
+    <Resource Include="Images\Kartya\Piros\VII.png" />
+    <Resource Include="Images\Kartya\Piros\VIII.png" />
+    <Resource Include="Images\Kartya\Piros\X.png" />
+    <Resource Include="Images\Kartya\Tok\Also.png" />
+    <Resource Include="Images\Kartya\Tok\Asz.png" />
+    <Resource Include="Images\Kartya\Tok\Felso.png" />
+    <Resource Include="Images\Kartya\Tok\IX.png" />
+    <Resource Include="Images\Kartya\Tok\Kiraly.png" />
+    <Resource Include="Images\Kartya\Tok\VII.png" />
+    <Resource Include="Images\Kartya\Tok\VIII.png" />
+    <Resource Include="Images\Kartya\Tok\X.png" />
+    <Resource Include="Images\Kartya\Zold\Also.png" />
+    <Resource Include="Images\Kartya\Zold\Asz.png" />
+    <Resource Include="Images\Kartya\Zold\Felso.png" />
+    <Resource Include="Images\Kartya\Zold\Kiraly.png" />
+    <Resource Include="Images\Kartya\Zold\VII.png" />
+    <Resource Include="Images\Kartya\Zold\VIII.png" />
+    <Resource Include="Images\Kartya\Zold\X.png" />
+    <Resource Include="Images\Kartya\Zold\IX.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

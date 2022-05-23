@@ -1,0 +1,59 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1" xmlns:usercontrols="clr-namespace:WpfApp1.UserControls"
+        mc:Ignorable="d"
+        Title="MesInt - Zsír" Height="700" Width="800" MinHeight="700" MinWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Padding="2" Panel.ZIndex="100">
+            <MenuItem Header="Fájl">
+                <MenuItem Header="Új játék" x:Name="menu_ujJatek" Click="menu_ujJatek_Click"/>
+                <MenuItem Header="Mentés" x:Name="menu_mentes" Click="menu_mentes_Click"/>
+                <MenuItem Header="Betoltés" x:Name="menu_betoltes" Click="menu_betoltes_Click"/>
+            </MenuItem>
+            <MenuItem Header="Szerkeszt">
+                <MenuItem Header="Játékállás szerkesztése" IsEnabled="False"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid x:Name="grid_content" Grid.Row="1">
+            <Grid.Background>
+                <RadialGradientBrush GradientOrigin="0.5,0.5" RadiusX="1" RadiusY="1">
+                    <GradientStop Color="#FF003A01" Offset="1"/>
+                    <GradientStop Color="#FF008903" Offset="0"/>
+                </RadialGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" MinWidth="100"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto" MinWidth="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <usercontrols:JatszottLapok x:Name="kijatszott" Grid.Column="0"/>
+                <usercontrols:Pakli x:Name="pakli" Grid.Column="1" VerticalAlignment="Center"/>
+            </Grid>
+            <usercontrols:Kez x:Name="jatekos" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="2" KepernyoOldal="Lent" LapotHuz="jatekos_LapotHuz" LapKijatszas="jatekos_LapKijatszas"/>
+            <usercontrols:Kez x:Name="ai0" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Balra" LapotHuz="ai0_LapotHuz" LapKijatszas="ai0_LapKijatszas"/>
+            <usercontrols:Kez x:Name="ai1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" KepernyoOldal="Fent" LapotHuz="ai1_LapotHuz" LapKijatszas="ai1_LapKijatszas"/>
+            <usercontrols:Kez x:Name="ai2" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Jobbra" LapotHuz="ai2_LapotHuz" LapKijatszas="ai2_LapKijatszas"/>
+        </Grid>
+    </Grid>
+</Window>
