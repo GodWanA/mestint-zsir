@@ -1,21 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml;
-using System.Xml.Serialization;
 using WpfApp1.UserControls;
 
 namespace WpfApp1
@@ -50,7 +38,7 @@ namespace WpfApp1
         private void jatekos_LapotHuz(object sender, RoutedEventArgs e)
         {
             //this.Huz(this.jatekos, true);
-            this.KezetPopulal(this.jatekos, true);
+            this.KezetPopulal(this.jatekos, this.menu_megnez.IsChecked);
         }
 
         private void ai0_LapotHuz(object sender, RoutedEventArgs e)
@@ -101,6 +89,8 @@ namespace WpfApp1
 
         private void UjJatekotKezd()
         {
+            this.menu_megnez.IsChecked = false;
+
             this.jatekos.TisztaKez();
             this.ai0.TisztaKez();
             this.ai1.TisztaKez();
@@ -125,38 +115,56 @@ namespace WpfApp1
             this.UjJatekotKezd();
         }
 
-        private void CanKorVege()
+        private void CanKorVege(bool isSokadikKor = false)
         {
-            if (
-                this.jatekos.IsEnabled == false
-                && this.ai0.IsEnabled == false
-                && this.ai1.IsEnabled == false
-                && this.ai2.IsEnabled == false
-            )
+            var korVege = this.jatekos.IsEnabled == false
+                          && this.ai0.IsEnabled == false
+                          && this.ai1.IsEnabled == false
+                          && this.ai2.IsEnabled == false;
+
+            if (!isSokadikKor)
             {
-                var res = this.kijatszott.CalculateNyertes(Oldal.Lent);
-                switch (res)
+                if (korVege)
                 {
-                    case KorEredmeny.Jatekos:
-                        this.jatekos.AddPont(this.kijatszott.CalculatePontszam());
-                        break;
-                    case KorEredmeny.AI0:
-                        this.ai0.AddPont(this.kijatszott.CalculatePontszam());
-                        break;
-                    case KorEredmeny.AI1:
-                        this.ai1.AddPont(this.kijatszott.CalculatePontszam());
-                        break;
-                    case KorEredmeny.AI2:
-                        this.ai2.AddPont(this.kijatszott.CalculatePontszam());
-                        break;
+                    var res = this.kijatszott.CalculateNyertes(Oldal.Lent);
+                    switch (res)
+                    {
+                        case KorEredmeny.Jatekos:
+                            this.jatekos.AddPont(this.kijatszott.CalculatePontszam());
+                            break;
+                        case KorEredmeny.AI0:
+                            this.ai0.AddPont(this.kijatszott.CalculatePontszam());
+                            break;
+                        case KorEredmeny.AI1:
+                            this.ai1.AddPont(this.kijatszott.CalculatePontszam());
+                            break;
+                        case KorEredmeny.AI2:
+                            this.ai2.AddPont(this.kijatszott.CalculatePontszam());
+                            break;
+                    }
+
+                    if (res != KorEredmeny.Dontetlen)
+                    {
+                        this.jatekos.IsElengedEnabled = false;
+                        this.ai0.IsElengedEnabled = false;
+                        this.ai1.IsElengedEnabled = false;
+                        this.ai2.IsElengedEnabled = false;
+
+                        this.KezetPopulal(this.jatekos, true);
+                        this.KezetPopulal(this.ai0, this.menu_megnez.IsChecked);
+                        this.KezetPopulal(this.ai1, this.menu_megnez.IsChecked);
+                        this.KezetPopulal(this.ai2, this.menu_megnez.IsChecked);
+                    }
+                    else
+                    {
+                        this.jatekos.IsElengedEnabled = true;
+                        this.ai0.IsElengedEnabled = true;
+                        this.ai1.IsElengedEnabled = true;
+                        this.ai2.IsElengedEnabled = true;
+                    }
+
+                    this.KorKezdes();
                 }
-
-                this.KezetPopulal(this.jatekos, true);
-                this.KezetPopulal(this.ai0, false);
-                this.KezetPopulal(this.ai1, false);
-                this.KezetPopulal(this.ai2, false);
-
-                this.KorKezdes();
             }
         }
 
@@ -253,6 +261,46 @@ namespace WpfApp1
                     }
                 }
             }
+        }
+
+        private void menu_megnez_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.IsLoaded)
+            {
+                //var b = this.menu_megnez.IsChecked;
+                //this.menu_megnez.IsChecked = !b;
+
+                //this.jatekos.SetLathatosag(this.menu_megnez.IsChecked);
+                this.ai0.SetLathatosag(this.menu_megnez.IsChecked);
+                this.ai1.SetLathatosag(this.menu_megnez.IsChecked);
+                this.ai2.SetLathatosag(this.menu_megnez.IsChecked);
+            }
+        }
+
+        private void jatekos_TovabbAd(object sender, RoutedEventArgs e)
+        {
+            this.jatekos.IsEnabled = false;
+            this.CanKorVege(true);
+        }
+
+        private void ai0_TovabbAd(object sender, RoutedEventArgs e)
+        {
+            this.jatekos.IsEnabled = false;
+            this.CanKorVege(true);
+        }
+
+
+
+        private void ai1_TovabbAd(object sender, RoutedEventArgs e)
+        {
+            this.jatekos.IsEnabled = false;
+            this.CanKorVege(true);
+        }
+
+        private void ai2_TovabbAd(object sender, RoutedEventArgs e)
+        {
+            this.jatekos.IsEnabled = false;
+            this.CanKorVege(true);
         }
     }
 }

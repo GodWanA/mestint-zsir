@@ -80,10 +80,26 @@ namespace WpfApp1.UserControls
             this.stackpanel_hand.Children.Clear();
             this.PontSzam = 0;
             this.textBlock_pont.Text = "";
+            this.IsEnabled = true;
+            this.IsElengedEnabled = false;
         }
 
         public int KartyaSzam { get; internal set; } = 0;
         public int PontSzam { get; private set; } = 0;
+
+        private bool _isElengedEnabled;
+        public bool IsElengedEnabled
+        {
+            get { return this._isElengedEnabled; }
+            internal set
+            {
+                //if (value != this._isElengedEnabled)
+                //{
+                this.button_tovabbAd.IsEnabled = value;
+                this._isElengedEnabled = value;
+                //}
+            }
+        }
 
         public Kez()
         {
@@ -230,6 +246,14 @@ namespace WpfApp1.UserControls
                         this.KezbeVesz(k, k.IsCardVisible);
                     }
                 }
+            }
+        }
+
+        internal void SetLathatosag(bool isVisible)
+        {
+            foreach (Kartya kartya in this.stackpanel_hand.Children)
+            {
+                kartya.SetCardVisible(isVisible);
             }
         }
     }
