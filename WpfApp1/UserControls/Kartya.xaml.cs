@@ -23,6 +23,7 @@ namespace WpfApp1.UserControls
         private const string sourcePath = "pack://application:,,,/Images/Kartya/";
 
         private bool _isInHand;
+        public bool IsZsir { get; private set; }
 
         public bool IsInHand
         {
@@ -49,6 +50,8 @@ namespace WpfApp1.UserControls
             this.Szine = szin;
             this.Erteke = ertek;
             this.IsCardVisible = visible;
+
+            if (ertek == Ertek.X || ertek == Ertek.Asz) this.IsZsir = true;
         }
 
         public void SetCardVisible(bool visible)

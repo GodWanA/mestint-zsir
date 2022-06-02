@@ -14,6 +14,9 @@ namespace WpfApp1.UserControls
     public partial class Pakli : UserControl, IXMLSave
     {
         private List<Kartya> pakli = new List<Kartya>();
+
+        public static int HetesLapokSzama { get; set; }
+        public static int ZsirLapokSzama { get; set; }
         public static event EventHandler ElfogyottPakli;
         //public static event EventHandler UjPakli;
 
@@ -47,6 +50,9 @@ namespace WpfApp1.UserControls
                     }
                 }
             }
+
+            Pakli.HetesLapokSzama = 4;
+            Pakli.ZsirLapokSzama = 8;
 
             this.Render();
         }
@@ -85,6 +91,8 @@ namespace WpfApp1.UserControls
                 var lap = this.pakli.Last();
                 this.pakli.Remove(lap);
 
+                //if (lap.Erteke == Ertek.VII) --Pakli.HetesLapokSzama;
+                //if (lap.Erteke == Ertek.X || lap.Erteke == Ertek.Asz) --Pakli.ZsirLapokSzama;
                 if (this.pakli.Count == 0) Pakli.ElfogyottPakli?.Invoke(this, new EventArgs());
 
                 this.Render();

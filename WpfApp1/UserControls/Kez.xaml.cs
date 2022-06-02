@@ -12,13 +12,29 @@ namespace WpfApp1.UserControls
     /// <summary>
     /// Interaction logic for Kez.xaml
     /// </summary>
-    public partial class Kez : UserControl, IXMLSave
+    public partial class Kez : UserControl, IXMLSave, IHeuriszticAIComponent
     {
         public event RoutedEventHandler LapotHuz;
         public event RoutedEventHandler TovabbAd;
 
         public delegate void Laplerakas(Kartya lap, object sender, EventArgs args);
         public event Laplerakas LapKijatszas;
+
+        private bool _isAI;
+        public bool IsAI
+        {
+            get
+            {
+                return this._isAI;
+            }
+            set
+            {
+                if (value) this.button_tovabbAd.Visibility = Visibility.Hidden;
+                else this.button_tovabbAd.Visibility = Visibility.Visible;
+
+                this._isAI = value;
+            }
+        }
 
         private Oldal _kepernyoOldal;
         public Oldal KepernyoOldal
@@ -101,6 +117,8 @@ namespace WpfApp1.UserControls
             }
         }
 
+        public bool IsElengedtem { get; set; }
+
         public Kez()
         {
             InitializeComponent();
@@ -120,6 +138,7 @@ namespace WpfApp1.UserControls
 
         private void button_tovabbAd_Click(object sender, RoutedEventArgs e)
         {
+            this.IsElengedtem = true;
             this.TovabbAd?.Invoke(sender, e);
         }
 
@@ -141,6 +160,11 @@ namespace WpfApp1.UserControls
             }
         }
 
+        internal bool CanHitHetes()
+        {
+            return this.stackpanel_hand.Children.Cast<Kartya>().Where(x => x.Erteke == Ertek.VII).Count() > 0;
+        }
+
         internal void AddPont(int v)
         {
             this.PontSzam += v;
@@ -149,15 +173,22 @@ namespace WpfApp1.UserControls
 
         private void Lap_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var kartya = sender as Kartya;
+            if (!this.IsAI)
+            {
+                var kartya = sender as Kartya;
+                this.OnLapKijatszas(kartya);
+            }
+        }
 
+        private void OnLapKijatszas(Kartya kartya)
+        {
+            this.stackpanel_hand.Children.Remove(kartya);
             kartya.SetMargin(new Thickness(), new Thickness());
             kartya.IsInHand = false;
 
             this.KartyaSzam--;
-            this.stackpanel_hand.Children.Remove(kartya);
 
-            this.LapKijatszas?.Invoke(kartya, this, new EventArgs());
+            if (!this.IsAI) this.LapKijatszas?.Invoke(kartya, this, new EventArgs());
 
             kartya.PreviewMouseDoubleClick -= this.Lap_PreviewMouseDoubleClick;
         }
@@ -255,6 +286,13 @@ namespace WpfApp1.UserControls
             {
                 kartya.SetCardVisible(isVisible);
             }
+        }
+
+        public Kartya Play(Kartya utendo, List<Kartya> kijatszottak)
+        {
+            var ret = IHeuriszticAIComponent.AICalculateCard(this.stackpanel_hand.Children.Cast<Kartya>().ToList(), utendo, kijatszottak);
+            this.OnLapKijatszas(ret);
+            return ret;
         }
     }
 

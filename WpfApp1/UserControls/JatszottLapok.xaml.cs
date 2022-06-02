@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -13,7 +15,8 @@ namespace WpfApp1.UserControls
     /// </summary>
     public partial class JatszottLapok : UserControl, IXMLSave
     {
-        Dictionary<Oldal, List<Kartya>> Lapok = new Dictionary<Oldal, List<Kartya>>();
+        public Dictionary<Oldal, List<Kartya>> Lapok { get; private set; } = new Dictionary<Oldal, List<Kartya>>();
+        private Kartya hivoLap;
 
         public Oldal Hivo { get; private set; }
 
@@ -23,8 +26,30 @@ namespace WpfApp1.UserControls
             this.LapTakaríto();
         }
 
+        internal List<Kartya> GetKartyaLista()
+        {
+            var list = new List<Kartya>();
+
+            foreach (var item in this.Lapok)
+            {
+                foreach (var inner in item.Value)
+                {
+                    list.Add(inner);
+                }
+            }
+
+            return list;
+        }
+
         internal void AppendCard(Kartya lap, Oldal oldal)
         {
+            //await Task.Run(() =>
+            //{
+            //    this.Dispatcher.Invoke(() =>
+            //    {
+            if (lap.Erteke == Ertek.VII) --Pakli.HetesLapokSzama;
+            if (lap.Erteke == Ertek.X || lap.Erteke == Ertek.Asz) --Pakli.ZsirLapokSzama;
+
             lap.SetCardVisible(true);
             this.grid_content.Children.Add(lap);
             this.Lapok[oldal].Add(lap);
@@ -51,6 +76,11 @@ namespace WpfApp1.UserControls
                     Grid.SetColumn(lap, 1);
                     break;
             }
+
+            //this.UpdateLayout();
+            //    });
+            //    Thread.Sleep(500);
+            //});
         }
 
         internal void Takarit()
@@ -68,7 +98,7 @@ namespace WpfApp1.UserControls
             this.Lapok.Add(Oldal.Jobbra, new List<Kartya>());
         }
 
-        public KorEredmeny CalculateNyertes(Oldal hivo)
+        public KorEredmeny CalculateNyertes(Oldal hivo, bool isSokadikKor = false)
         {
             this.Hivo = hivo;
 
@@ -79,38 +109,55 @@ namespace WpfApp1.UserControls
                 this.Lapok[Oldal.Jobbra].Last(),
             };
 
-            var hivoLap = this.Lapok[hivo].Last();
+            if (!isSokadikKor) this.hivoLap = this.Lapok[hivo].Last();
 
             var vanHetes = last.Where(x => x.Erteke == Ertek.VII).FirstOrDefault() != null ? true : false;
-            var c = this.Lapok.Where(x => x.Value.Last().Erteke == hivoLap.Erteke).Count();
+            var c = this.Lapok.Where(x => x.Value.Last().Erteke == hivoLap.Erteke);
 
             if (vanHetes)
             {
                 var utok = this.Lapok.Where(x => x.Value.Last().Erteke == Ertek.VII).Select(x => x.Key);
-                if (utok.Count() > 1) return KorEredmeny.Dontetlen;
+                if (utok.Count() > 1)
+                {
+                    if(isSokadikKor)
+                    {
+                        var ret = Oldal.Lent;
+
+                        foreach (var item in this.Lapok)
+                        {
+                            if (item.Value.Where(x => x.Erteke == Ertek.VII).Count() > 0) ret = item.Key;
+                        }
+
+                        return JatszottLapok.GetNyertesOldal(ret);
+                    }
+                    else return KorEredmeny.Dontetlen;
+                }
                 else
                 {
-                    switch (utok.FirstOrDefault())
-                    {
-                        case Oldal.Lent: return KorEredmeny.Jatekos;
-                        case Oldal.Balra: return KorEredmeny.AI0;
-                        case Oldal.Fent: return KorEredmeny.AI1;
-                        case Oldal.Jobbra: return KorEredmeny.AI2;
-                    }
+                    JatszottLapok.GetNyertesOldal(utok.FirstOrDefault());
                 }
             }
 
-            if (c > 1) return KorEredmeny.Dontetlen;
+            if (!isSokadikKor)
+            {
+                if (c.Count() > 1) return KorEredmeny.Dontetlen;
+                else return JatszottLapok.GetNyertesOldal(hivo);
+            }
             else
             {
-                switch (hivo)
-                {
-                    default: return KorEredmeny.Dontetlen;
-                    case Oldal.Lent: return KorEredmeny.Jatekos;
-                    case Oldal.Balra: return KorEredmeny.AI0;
-                    case Oldal.Fent: return KorEredmeny.AI1;
-                    case Oldal.Jobbra: return KorEredmeny.AI2;
-                }
+                return JatszottLapok.GetNyertesOldal(c.Last().Key);
+            }
+        }
+
+        private static KorEredmeny GetNyertesOldal(Oldal hivo)
+        {
+            switch (hivo)
+            {
+                default: return KorEredmeny.Dontetlen;
+                case Oldal.Lent: return KorEredmeny.Jatekos;
+                case Oldal.Balra: return KorEredmeny.AI0;
+                case Oldal.Fent: return KorEredmeny.AI1;
+                case Oldal.Jobbra: return KorEredmeny.AI2;
             }
         }
 

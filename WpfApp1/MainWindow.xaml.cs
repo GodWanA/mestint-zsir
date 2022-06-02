@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using WpfApp1.UserControls;
@@ -61,8 +63,17 @@ namespace WpfApp1
 
         private void jatekos_LapKijatszas(Kartya lap, object sender, EventArgs args)
         {
-            this.kijatszott.AppendCard(lap, this.jatekos.KepernyoOldal);
-            this.jatekos.IsEnabled = false;
+            this.KartyaKijatszasa(lap, this.jatekos);
+
+            if (ai0.IsAI) this.KartyaKijatszasa(this.ai0.Play(lap, this.kijatszott.GetKartyaLista()), this.ai0);
+            if (ai1.IsAI) this.KartyaKijatszasa(this.ai1.Play(lap, this.kijatszott.GetKartyaLista()), this.ai1);
+            if (ai2.IsAI) this.KartyaKijatszasa(this.ai2.Play(lap, this.kijatszott.GetKartyaLista()), this.ai2);
+        }
+
+        private void KartyaKijatszasa(Kartya l, Kez j)
+        {
+            this.kijatszott.AppendCard(l, j.KepernyoOldal);
+            j.IsEnabled = false;
             this.CanKorVege();
         }
 
@@ -122,49 +133,56 @@ namespace WpfApp1
                           && this.ai1.IsEnabled == false
                           && this.ai2.IsEnabled == false;
 
-            if (!isSokadikKor)
+            if (korVege)
             {
-                if (korVege)
+                var res = this.kijatszott.CalculateNyertes(Oldal.Lent, isSokadikKor);
+
+                if (
+                    (!this.ai0.IsElengedtem || !this.ai1.IsElengedtem || !this.ai2.IsElengedtem)
+                    && (this.jatekos.CanHitHetes() && !this.jatekos.IsElengedEnabled)
+                )
                 {
-                    var res = this.kijatszott.CalculateNyertes(Oldal.Lent);
-                    switch (res)
-                    {
-                        case KorEredmeny.Jatekos:
-                            this.jatekos.AddPont(this.kijatszott.CalculatePontszam());
-                            break;
-                        case KorEredmeny.AI0:
-                            this.ai0.AddPont(this.kijatszott.CalculatePontszam());
-                            break;
-                        case KorEredmeny.AI1:
-                            this.ai1.AddPont(this.kijatszott.CalculatePontszam());
-                            break;
-                        case KorEredmeny.AI2:
-                            this.ai2.AddPont(this.kijatszott.CalculatePontszam());
-                            break;
-                    }
-
-                    if (res != KorEredmeny.Dontetlen)
-                    {
-                        this.jatekos.IsElengedEnabled = false;
-                        this.ai0.IsElengedEnabled = false;
-                        this.ai1.IsElengedEnabled = false;
-                        this.ai2.IsElengedEnabled = false;
-
-                        this.KezetPopulal(this.jatekos, true);
-                        this.KezetPopulal(this.ai0, this.menu_megnez.IsChecked);
-                        this.KezetPopulal(this.ai1, this.menu_megnez.IsChecked);
-                        this.KezetPopulal(this.ai2, this.menu_megnez.IsChecked);
-                    }
-                    else
-                    {
-                        this.jatekos.IsElengedEnabled = true;
-                        this.ai0.IsElengedEnabled = true;
-                        this.ai1.IsElengedEnabled = true;
-                        this.ai2.IsElengedEnabled = true;
-                    }
-
-                    this.KorKezdes();
+                    res = KorEredmeny.Dontetlen;
                 }
+
+                switch (res)
+                {
+                    case KorEredmeny.Jatekos:
+                        this.jatekos.AddPont(this.kijatszott.CalculatePontszam());
+                        break;
+                    case KorEredmeny.AI0:
+                        this.ai0.AddPont(this.kijatszott.CalculatePontszam());
+                        break;
+                    case KorEredmeny.AI1:
+                        this.ai1.AddPont(this.kijatszott.CalculatePontszam());
+                        break;
+                    case KorEredmeny.AI2:
+                        this.ai2.AddPont(this.kijatszott.CalculatePontszam());
+                        break;
+                }
+
+                if (res != KorEredmeny.Dontetlen)
+                {
+                    this.jatekos.IsElengedEnabled = false;
+                    this.ai0.IsElengedEnabled = false;
+                    this.ai1.IsElengedEnabled = false;
+                    this.ai2.IsElengedEnabled = false;
+
+                    this.KezetPopulal(this.jatekos, true);
+                    this.KezetPopulal(this.ai0, this.menu_megnez.IsChecked);
+                    this.KezetPopulal(this.ai1, this.menu_megnez.IsChecked);
+                    this.KezetPopulal(this.ai2, this.menu_megnez.IsChecked);
+                }
+                else
+                {
+                    this.jatekos.IsElengedEnabled = true;
+                    this.ai0.IsElengedEnabled = true;
+                    this.ai1.IsElengedEnabled = true;
+                    this.ai2.IsElengedEnabled = true;
+                }
+
+                //Thread.Sleep(1000);
+                this.KorKezdes();
             }
         }
 
@@ -280,26 +298,28 @@ namespace WpfApp1
         private void jatekos_TovabbAd(object sender, RoutedEventArgs e)
         {
             this.jatekos.IsEnabled = false;
+            if (this.ai0.IsAI) this.ai0.IsEnabled = false;
+            if (this.ai1.IsAI) this.ai1.IsEnabled = false;
+            if (this.ai2.IsAI) this.ai2.IsEnabled = false;
+
             this.CanKorVege(true);
         }
 
         private void ai0_TovabbAd(object sender, RoutedEventArgs e)
         {
-            this.jatekos.IsEnabled = false;
+            this.ai0.IsEnabled = false;
             this.CanKorVege(true);
         }
 
-
-
         private void ai1_TovabbAd(object sender, RoutedEventArgs e)
         {
-            this.jatekos.IsEnabled = false;
+            this.ai1.IsEnabled = false;
             this.CanKorVege(true);
         }
 
         private void ai2_TovabbAd(object sender, RoutedEventArgs e)
         {
-            this.jatekos.IsEnabled = false;
+            this.ai2.IsEnabled = false;
             this.CanKorVege(true);
         }
     }

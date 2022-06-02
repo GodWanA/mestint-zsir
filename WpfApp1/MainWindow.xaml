@@ -52,9 +52,9 @@
                 <usercontrols:Pakli x:Name="pakli" Grid.Column="1" VerticalAlignment="Center"/>
             </Grid>
             <usercontrols:Kez x:Name="jatekos" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="2" KepernyoOldal="Lent" LapotHuz="jatekos_LapotHuz" LapKijatszas="jatekos_LapKijatszas" TovabbAd="jatekos_TovabbAd"/>
-            <usercontrols:Kez x:Name="ai0" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Balra" LapotHuz="ai0_LapotHuz" LapKijatszas="ai0_LapKijatszas" TovabbAd="ai0_TovabbAd"/>
-            <usercontrols:Kez x:Name="ai1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" KepernyoOldal="Fent" LapotHuz="ai1_LapotHuz" LapKijatszas="ai1_LapKijatszas" TovabbAd="ai1_TovabbAd"/>
-            <usercontrols:Kez x:Name="ai2" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Jobbra" LapotHuz="ai2_LapotHuz" LapKijatszas="ai2_LapKijatszas" TovabbAd="ai2_TovabbAd"/>
+            <usercontrols:Kez x:Name="ai0" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Balra" LapotHuz="ai0_LapotHuz" LapKijatszas="ai0_LapKijatszas" TovabbAd="ai0_TovabbAd" IsAI="True"/>
+            <usercontrols:Kez x:Name="ai1" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0" KepernyoOldal="Fent" LapotHuz="ai1_LapotHuz" LapKijatszas="ai1_LapKijatszas" TovabbAd="ai1_TovabbAd" IsAI="True"/>
+            <usercontrols:Kez x:Name="ai2" VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" KepernyoOldal="Jobbra" LapotHuz="ai2_LapotHuz" LapKijatszas="ai2_LapKijatszas" TovabbAd="ai2_TovabbAd" IsAI="True"/>
         </Grid>
     </Grid>
 </Window>
