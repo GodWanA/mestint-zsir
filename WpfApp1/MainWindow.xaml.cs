@@ -68,15 +68,24 @@ namespace WpfApp1
 
             Task.Run(() =>
             {
-                this.Dispatcher.Invoke(() => { if (ai0.IsAI) this.KartyaKijatszasa(this.ai0.Play(lap, this.kijatszott.GetKartyaLista()), this.ai0, false); });
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (ai0.IsAI) this.KartyaKijatszasa(this.ai0.Play(lap, this.kijatszott.GetKartyaLista()), this.ai0, false);
+                });
                 Thread.Sleep(r.Next(1000, 2000));
                 this.Dispatcher.Invoke(() => this.CanKorVege());
 
-                this.Dispatcher.Invoke(() => { if (ai1.IsAI) this.KartyaKijatszasa(this.ai1.Play(lap, this.kijatszott.GetKartyaLista()), this.ai1, false); });
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (ai1.IsAI) this.KartyaKijatszasa(this.ai1.Play(lap, this.kijatszott.GetKartyaLista()), this.ai1, false);
+                });
                 Thread.Sleep(r.Next(1000, 2000));
                 this.Dispatcher.Invoke(() => this.CanKorVege());
 
-                this.Dispatcher.Invoke(() => { if (ai2.IsAI) this.KartyaKijatszasa(this.ai2.Play(lap, this.kijatszott.GetKartyaLista()), this.ai2); });
+                this.Dispatcher.Invoke(() =>
+                {
+                    if (ai2.IsAI) this.KartyaKijatszasa(this.ai2.Play(lap, this.kijatszott.GetKartyaLista()), this.ai2, false);
+                });
                 Thread.Sleep(r.Next(1000, 2000));
                 this.Dispatcher.Invoke(() => this.CanKorVege());
             });
