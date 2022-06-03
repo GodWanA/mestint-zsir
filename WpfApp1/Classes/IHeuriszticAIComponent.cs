@@ -15,12 +15,16 @@ namespace WpfApp1.Classes
             int zsirLapok = kezben.Where(x => x.Erteke == Ertek.X || x.Erteke == Ertek.Asz).Count();
 
 
-            int megeriUtni = hetesKezben.Count() * 3;
-            megeriUtni += tudUtni.Count() * 2;
+            // Győzelmi faktorok:
+            int megeriUtni = hetesKezben.Count() * 2;
+            megeriUtni += tudUtni.Count() * 3;
             megeriUtni += kijatszott.Where(x => x.IsZsir).Count() * 10;
+
+            // Rizikó faktorok:
             megeriUtni -= Pakli.ZsirLapokSzama;
             megeriUtni -= Pakli.HetesLapokSzama;
 
+            // ha nagyobb, mint 0 megéri megverni ha nem, akkor beáldozza a "legértéktelenebb" lapját
             if (megeriUtni > 0)
             {
                 if (tudUtni.Count() > 0) ret = tudUtni.FirstOrDefault();
@@ -29,7 +33,7 @@ namespace WpfApp1.Classes
             }
             else
             {
-                ret = kezben.Where(x => x.Erteke != Ertek.VII && !x.IsZsir).FirstOrDefault();
+                ret = kezben.Where(x => x.Erteke != Ertek.VII && !x.IsZsir && x.Erteke == kezben.Min(x => x.Erteke)).FirstOrDefault();
                 if (ret == null) ret = kezben.Where(x => x.Erteke == kezben.Min(x => x.Erteke)).FirstOrDefault();
             }
 
