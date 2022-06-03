@@ -64,17 +64,29 @@ namespace WpfApp1
         private void jatekos_LapKijatszas(Kartya lap, object sender, EventArgs args)
         {
             this.KartyaKijatszasa(lap, this.jatekos);
+            var r = new Random();
 
-            if (ai0.IsAI) this.KartyaKijatszasa(this.ai0.Play(lap, this.kijatszott.GetKartyaLista()), this.ai0);
-            if (ai1.IsAI) this.KartyaKijatszasa(this.ai1.Play(lap, this.kijatszott.GetKartyaLista()), this.ai1);
-            if (ai2.IsAI) this.KartyaKijatszasa(this.ai2.Play(lap, this.kijatszott.GetKartyaLista()), this.ai2);
+            Task.Run(() =>
+            {
+                this.Dispatcher.Invoke(() => { if (ai0.IsAI) this.KartyaKijatszasa(this.ai0.Play(lap, this.kijatszott.GetKartyaLista()), this.ai0, false); });
+                Thread.Sleep(r.Next(1000, 2000));
+                this.Dispatcher.Invoke(() => this.CanKorVege());
+
+                this.Dispatcher.Invoke(() => { if (ai1.IsAI) this.KartyaKijatszasa(this.ai1.Play(lap, this.kijatszott.GetKartyaLista()), this.ai1, false); });
+                Thread.Sleep(r.Next(1000, 2000));
+                this.Dispatcher.Invoke(() => this.CanKorVege());
+
+                this.Dispatcher.Invoke(() => { if (ai2.IsAI) this.KartyaKijatszasa(this.ai2.Play(lap, this.kijatszott.GetKartyaLista()), this.ai2); });
+                Thread.Sleep(r.Next(1000, 2000));
+                this.Dispatcher.Invoke(() => this.CanKorVege());
+            });
         }
 
-        private void KartyaKijatszasa(Kartya l, Kez j)
+        private void KartyaKijatszasa(Kartya l, Kez j, bool isKorvege = true)
         {
             this.kijatszott.AppendCard(l, j.KepernyoOldal);
             j.IsEnabled = false;
-            this.CanKorVege();
+            if (isKorvege) this.CanKorVege();
         }
 
         private void ai0_LapKijatszas(Kartya lap, object sender, EventArgs args)
