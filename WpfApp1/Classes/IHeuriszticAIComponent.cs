@@ -25,12 +25,12 @@ namespace WpfApp1.Classes
             {
                 if (tudUtni.Count() > 0) ret = tudUtni.FirstOrDefault();
                 if (hetesKezben.Count() > 0) ret = hetesKezben.FirstOrDefault();
-                else ret = kezben.FirstOrDefault();
+                else ret = kezben.Where(x => x.Erteke == kezben.Min(x => x.Erteke)).FirstOrDefault();
             }
             else
             {
                 ret = kezben.Where(x => x.Erteke != Ertek.VII && !x.IsZsir).FirstOrDefault();
-                if (ret == null) ret = kezben.FirstOrDefault();
+                if (ret == null) ret = kezben.Where(x => x.Erteke == kezben.Min(x => x.Erteke)).FirstOrDefault();
             }
 
             return ret;
